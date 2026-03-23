@@ -41,3 +41,47 @@ test('disable colors if they are not supported', async t => {
 	const {stdout} = await execaNode(fileURLToPath(new URL('_fixture.js', import.meta.url)));
 	t.is(stdout, 'testout testerr');
 });
+
+test('FORCE_COLOR=0 disables color support', async t => {
+	const {stdout} = await execaNode(
+		fileURLToPath(new URL('_force-color-fixture.js', import.meta.url)),
+		{env: {FORCE_COLOR: '0'}},
+	);
+	t.is(stdout, 'false');
+});
+
+test('FORCE_COLOR=1 sets level 1', async t => {
+	const {stdout} = await execaNode(
+		fileURLToPath(new URL('_force-color-fixture.js', import.meta.url)),
+		{env: {FORCE_COLOR: '1'}},
+	);
+	const result = JSON.parse(stdout);
+	t.is(result.level, 1);
+	t.true(result.hasBasic);
+	t.false(result.has256);
+	t.false(result.has16m);
+});
+
+test('FORCE_COLOR=2 sets level 2', async t => {
+	const {stdout} = await execaNode(
+		fileURLToPath(new URL('_force-color-fixture.js', import.meta.url)),
+		{env: {FORCE_COLOR: '2'}},
+	);
+	const result = JSON.parse(stdout);
+	t.is(result.level, 2);
+	t.true(result.hasBasic);
+	t.true(result.has256);
+	t.false(result.has16m);
+});
+
+test('FORCE_COLOR=3 sets level 3', async t => {
+	const {stdout} = await execaNode(
+		fileURLToPath(new URL('_force-color-fixture.js', import.meta.url)),
+		{env: {FORCE_COLOR: '3'}},
+	);
+	const result = JSON.parse(stdout);
+	t.is(result.level, 3);
+	t.true(result.hasBasic);
+	t.true(result.has256);
+	t.true(result.has16m);
+});

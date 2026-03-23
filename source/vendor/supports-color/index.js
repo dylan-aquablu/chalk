@@ -69,6 +69,10 @@ function _supportsColor(haveStream, {streamIsTTY, sniffFlags = true} = {}) {
 		return 0;
 	}
 
+	if (forceColor !== undefined) {
+		return forceColor;
+	}
+
 	if (sniffFlags) {
 		if (hasFlag('color=16m')
 			|| hasFlag('color=full')
@@ -87,14 +91,12 @@ function _supportsColor(haveStream, {streamIsTTY, sniffFlags = true} = {}) {
 		return 1;
 	}
 
-	if (haveStream && !streamIsTTY && forceColor === undefined) {
+	if (haveStream && !streamIsTTY) {
 		return 0;
 	}
 
-	const min = forceColor || 0;
-
 	if (env.TERM === 'dumb') {
-		return min;
+		return 0;
 	}
 
 	if (process.platform === 'win32') {
@@ -120,7 +122,7 @@ function _supportsColor(haveStream, {streamIsTTY, sniffFlags = true} = {}) {
 			return 1;
 		}
 
-		return min;
+		return 0;
 	}
 
 	if ('TEAMCITY_VERSION' in env) {
@@ -170,7 +172,7 @@ function _supportsColor(haveStream, {streamIsTTY, sniffFlags = true} = {}) {
 		return 1;
 	}
 
-	return min;
+	return 0;
 }
 
 export function createSupportsColor(stream, options = {}) {
