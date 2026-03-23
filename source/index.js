@@ -39,8 +39,7 @@ export class Chalk {
 }
 
 const chalkFactory = options => {
-	// eslint-disable-next-line no-implicit-coercion
-	const chalk = (...strings) => strings.length === 1 ? '' + strings[0] : (strings.length === 2 ? strings[0] + ' ' + strings[1] : strings.join(' '));
+	const chalk = (...strings) => (strings.length === 1) ? ('' + strings[0]) : (strings.length === 2) ? (strings[0] + ' ' + strings[1]) : strings.join(' ');
 	applyOptions(chalk, options);
 
 	Object.setPrototypeOf(chalk, createChalk.prototype);
